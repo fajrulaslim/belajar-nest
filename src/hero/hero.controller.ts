@@ -1,4 +1,15 @@
-import { Controller, Get, HttpCode, Post, Res, Req } from "@nestjs/common";
+import { Controller, Get, HttpCode, Post, Res, Req, Header, Redirect } from "@nestjs/common";
+
+const heros = [
+    {
+        id: 1,
+        name: "Hero 1"
+    }, 
+    {
+        id: 2,
+        name: "Hero 2"
+    }
+]
 
 @Controller("hero")
 export class HeroController {
@@ -8,9 +19,11 @@ export class HeroController {
     }
     @Get("get")
     @HttpCode(200)
+    @Header('Content-Type', "application/json")
     get(@Res() response: any) {
         response.json({
-            title: 'Hero get'
+            title: 'Hero get',
+            data: heros
         })
     }
     @Get("create")
@@ -20,6 +33,13 @@ export class HeroController {
     }
     @Post("store")
     store(@Req() request: any, @Res() response: any) {
-        response.status(200).json(request.body)
+        const { id, name } = request.body
+        heros.push({ id, name })
+        response.status(200).json(heros)
+    }
+    @Get('welcome')
+    @Redirect('https://fajrulaslim.com')
+    welcom() {
+        return 'Welcome'
     }
 }
