@@ -1,4 +1,5 @@
-import { Controller, Get, HttpCode, Post, Res, Req, Header, Redirect } from "@nestjs/common";
+import { Controller, Get, HttpCode, Post, Res, Req, Param, Body, Header, Redirect } from "@nestjs/common";
+import { CreateHeroDto } from "./dto/create-hero.dto";
 
 const heros = [
     {
@@ -26,6 +27,10 @@ export class HeroController {
             data: heros
         })
     }
+    @Get("detail/:id")
+    detail(@Param() params: any) {
+        return 'Hero detail ' + params.id
+    }
     @Get("create")
     create(@Res({ passthrough: true }) response: any) {
         response.cookie("name", "Fajrul")
@@ -37,6 +42,16 @@ export class HeroController {
         heros.push({ id, name })
         response.status(200).json(heros)
     }
+    @Post("store2")
+    store2(@Req() request: any, @Body('name') name: any, @Res({ passthrough: true }) response: any) {
+        return name
+    }
+
+    @Post("store_dto")
+    store_dto(@Req() request: any, @Body() createHeroDto: CreateHeroDto, @Res({ passthrough: true }) response: any) {
+        return createHeroDto
+    }
+
     @Get('welcome')
     @Redirect('https://fajrulaslim.com')
     welcom() {
