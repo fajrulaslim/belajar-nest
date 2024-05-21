@@ -2,6 +2,7 @@ import { Controller, Get, HttpCode, Post, Put, Res, Req, Param, Body, Header, Re
 import { CreateHeroDto } from "./dto/create-hero.dto";
 import { UpdateHeroDto } from "./dto/update-hero.dto";
 import { HeroService } from "./hero.service";
+import { Response, Request } from 'express';
 
 const heros = [
     {
@@ -25,7 +26,7 @@ export class HeroController {
     @Get("get")
     @HttpCode(200)
     @Header('Content-Type', "application/json")
-    get(@Res() response: any) {
+    get(@Res() response: Response) {
         // response.json({
         //     title: 'Hero get',
         //     data: heros
@@ -38,18 +39,18 @@ export class HeroController {
         return hero
     }
     @Get("create")
-    create(@Res({ passthrough: true }) response: any) {
+    create(@Res({ passthrough: true }) response: Response) {
         response.cookie("name", "Fajrul")
         return 'Create hero'
     }
     @Post("store")
-    store(@Req() request: any, @Res() response: any) {
+    store(@Req() request: Request, @Res() response: Response) {
         const { id, name } = request.body
         heros.push({ id, name })
         response.status(200).json(heros)
     }
     @Post("store2")
-    store2(@Req() request: any, @Body('name') name: any, @Res({ passthrough: true }) response: any) {
+    store2(@Body('name') name: any, @Res({ passthrough: true }) response: any) {
         return name
     }
     @Post("store_dto")
